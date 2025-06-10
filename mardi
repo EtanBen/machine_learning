@@ -133,27 +133,39 @@ approx_image=approx.reshape(8,8)
 erreur=np.linalg.norm(original_image-approx_image)/np.linalg.norm(original_image)
 print("erreur :",erreur)
 
+fig, axes = plt.subplots(4, 4, figsize=(8, 8))
+axes=axes.flatten
 
 #boucle : plot the original image and the 15 approximation on a 4x4 subfigure
-for k in (0,15):
+for k in range (16):
+    
     pca= PCA(n_components=k)
     principalComponents = pca.fit(F)
     principalComponents2 = pca.transform(F[sample_index:sample_index+1])
 
     approx = pca.inverse_transform(principalComponents2)
     approx_image=approx.reshape(8,8)
+    
     erreur=np.linalg.norm(original_image-approx_image)/np.linalg.norm(original_image)
     print("erreur :",erreur)
     print("PCA:",principalComponents2)
     
-    
-    
+    plt.subplot(4, 4, k+1)
+    plt.imshow(approx_image, cmap='gray')
+    plt.title(f"k={k},erreur={erreur}")
+
+
+plt.tight_layout()
+plt.show()
+
 
 ### SSIM !!!!!!
 
-
+""""
 
 #### TODO: Expolore the explanined variance of PCA and plot  
+
+
 # Question : Que faire si on utilise pas l'acp
 #Comment générer des images à partir de l'acp
 
@@ -211,3 +223,7 @@ F_final = F_final
 
 # Print final feature matrix shape
 print(f"Final feature matrix F_final shape: {F_final.shape}")
+
+"""
+
+# A LA FIN : génerer une matrice de taille 24 col * nb échantillons 
