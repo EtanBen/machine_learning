@@ -282,22 +282,26 @@ F_zones = extract_zone_features(F)
 # Print extracted feature shape
 print(f"Feature matrix F_zones shape: {F_zones.shape}")
 
-
+################################################################
 ### Edge detection features
 
 from scipy.ndimage import sobel
-A = sobel(original_image,axis=-1,output=None,cval=0.0,mode='reflect')
-plt.imshow(A,cmap='gray')
+images = digits.images  
 
-## TODO: Get used to the Sobel filter by applying it to an image and displaying both the original image 
-# and the result of applying the Sobel filter side by side
+gradient_means = []
 
+for image in images:
+    A_x = ndimage.sobel(image, axis=0, mode='reflect')
+    A_y = ndimage.sobel(image, axis=1, mode='reflect')
+    A = np.sqrt(A_x**2 + A_y**2)
+    m = np.mean(A)
+    gradient_means.append(m)
 
-# TODO: Compute the average edge intensity for each image and return it as an n by 1 array
-F_edges = None
-
-# Print feature shape after edge extraction
-print(f"Feature matrix F_edges shape: {F_edges.shape}")
+gradient_means = np.array(gradient_means).reshape(-1, 1)
+print("Gradient global moyen (forme) :", gradient_means.shape)
+F_sobel=gradient_means
+F_sobel
+################################
 # PCA feature 
 pca = PCA().fit(F)  # F : matrice normalisée (ex: digits.data / 16)
 #calculer autant de composantes qu’il y a de dimensions dans F
@@ -317,10 +321,26 @@ plt.show()
 n_components = np.argmax(cum_var >= 0.95) 
 print(f"Nombre minimal de composantes pour 95% de variance : {n_components}")
 
+from sklearn.decomposition import PCA
+import numpy as np
+import pandas as pd
+
+
+pca_28 = PCA(n_components=28)
+F_reduced = pca_28.fit_transform(F) 
+
+df_pca = pd.DataFrame(F_reduced, columns=[f'PC{i+1}' for i in range(28)])
+np_pca = df_pca.to_numpy()
+F_acp = np_pca
+F_acp
+
+#######################################################
 ### connect all the features together
 
 # TODO: Concatenate PCA, zone-based, and edge features
-F_final = None 
+F_final = np.hstack([F_acp, F_zones,F_sobel])
+
+
 
 # TODO: Normalize final features
 F_final = F_final
