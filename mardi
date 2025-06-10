@@ -222,6 +222,17 @@ plt.show()
 
 #### TODO: Expolore the explanined variance of PCA and plot  
 
+pca2= PCA().fit(F)
+
+var_cumulee=np.cumsum(pca2.explained_variance_ratio_)
+
+
+plt.plot(var_cumulee)
+plt.xlabel("Nb de composantes")
+plt.ylabel("Variance expliquée cumulée")
+plt.title("Variance expliquée selon le nombre de composantes")
+plt.show()
+
 
 # Question : Que faire si on utilise pas l'acp
 #Comment générer des images à partir de l'acp
@@ -231,13 +242,24 @@ plt.show()
 
 ### TODO: Display the whole database in 2D: 
 
+principal_components = pca.fit_transform(F)
+
+sns.scatterplot(x=principal_components[:, 0], y=principal_components[:, 1], hue=digits.target,palette='bright')
+plt.title('Database 2D')
+plt.xlabel('1 ère composante ')
+plt.ylabel('2ème composante')
+plt.legend(title='Chiffre')
+plt.show()
 
 ### TODO: Create a 20 dimensional PCA-based feature matrix
 
-F_pca = None
+pca20= PCA(n_components=20)
+
+F_pca = pca20.fit_transform(F)
 
 # Print reduced feature matrix shape
 print(f"Feature matrix F_pca shape: {F_pca.shape}")
+
 
 
 ##########################################
