@@ -217,9 +217,6 @@ plt.show()
 
 
 
-
-""""
-
 #### TODO: Expolore the explanined variance of PCA and plot  
 
 pca2= PCA().fit(F)
@@ -332,6 +329,6 @@ F_final = F_final
 # Print final feature matrix shape
 print(f"Final feature matrix F_final shape: {F_final.shape}")
 
-"""
+
 
 # A LA FIN : génerer une matrice de taille 24 col * nb échantillons 
