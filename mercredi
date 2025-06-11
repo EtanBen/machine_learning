@@ -6,6 +6,8 @@ from sklearn.model_selection import cross_val_score, KFold
 from sklearn.multiclass import  OneVsOneClassifier,OneVsRestClassifier
 from sklearn.svm import SVC
 import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 # Load processed feature matrix and labels
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.pipeline import Pipeline, FeatureUnion
