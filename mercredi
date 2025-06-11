@@ -20,6 +20,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.datasets import make_classification
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score
 
 # TODO: Add any util functions you may have from the previous script
 digits = load_digits()
