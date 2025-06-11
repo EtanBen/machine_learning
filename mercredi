@@ -32,7 +32,7 @@ def get_statistics_text(targets):
     df=pd.DataFrame({'Classe': targets})
     compter=df['Classe'].value_counts().sort_index()
     print("distribution")
-    print(compter)
+    #print(compter)
     
     return compter
 
