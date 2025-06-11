@@ -50,9 +50,69 @@ np.save("test_label.npy", y_test)
 
 # TODO: Print dataset split summary...
 
+print("Dataset original:")
+print("Nb échantillons:",len(y))
+print("Nb classes:", len(np.unique(y)))
+original=get_statistics_text(y)
+print(original)
+
+print("Dataset d'entrainement:")
+print("Nb échantillons:",len(y_train))
+print("Nb classes:", len(np.unique(y_train)))
+train=get_statistics_text(y_train)
+print(train)
+
+print("Dataset de test:")
+print("Nb échantillons:",len(y_test))
+print("Nb classes:", len(np.unique(y_test)))
+test=get_statistics_text(y_test)
+print(test)
+
 
 # TODO: ... and plot graphs of the three distributions in a readable and useful manner (bar graph, either side by side, or with some transparancy)
-plt.figure()
+
+
+#sns.barplot(x=a.index, y=a.values)
+#plt.show()
+
+#sns.barplot(x=b.index, y=b.values)
+#plt.show()
+
+#sns.barplot(x=c.index, y=c.values)
+#plt.show()
+
+
+
+les_3 = pd.DataFrame({'Original': original,'Train': train,'Test': test })
+
+# Tracer les trois distributions sur le même graphique
+les_3.plot(kind='bar', width=0.8)
+plt.title('Distribution des classes dans les 3 datasets')
+plt.xlabel('Classe')
+plt.ylabel('Nb échantillons')
+plt.legend(title='Dataset')
+#plt.grid(True, axis='y', linestyle='--')
+plt.tight_layout()
+plt.show()
+
+#train test et original
+
+
+# Avec la normalisation
+#normaliser que pour chaque ligne ait la même somme : df.div(df.sum(axis = 1), axis = 0)
+
+somme=les_3.sum(axis=0)
+div=les_3.div(somme, axis=1) 
+normalize = div * 100
+
+# Tracer les trois distributions normalisées sur le même graphique
+ax = normalize.plot(kind='bar')
+plt.title('Distribution normalisée des classes dans les 3 datasets')
+plt.xlabel('Classe')
+plt.ylabel('% échantillons')
+plt.legend(title='Dataset')
+
+plt.tight_layout()
 plt.show()
 
 
