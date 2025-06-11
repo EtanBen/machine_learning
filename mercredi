@@ -21,6 +21,8 @@ from sklearn.datasets import make_classification
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.metrics import accuracy_score
+import time 
+from sklearn.multiclass import OneVsRestClassifier
 
 # TODO: Add any util functions you may have from the previous script
 digits = load_digits()
@@ -395,4 +397,70 @@ def plot_test_size_effect():
     plt.tight_layout()
     plt.show()
 plot_test_size_effect()
+
+
+
+def tmp_ovr(X_train, y_train, X_test, y_test):
+    all_features = FeatureUnion([
+        ('zonal', ZonalInfoPreprocessing()),
+        ('edges', EdgeInfoPreprocessing()),
+        ('pca', PCA(n_components=28))
+    ])
+
+    clf_ovr = Pipeline([
+        ('standard', StandardScaler()),
+        ('features', all_features),
+        ('minmax', MinMaxScaler()),
+        ('svc', OneVsRestClassifier(SVC(kernel='linear', random_state=42)))
+    ])
+
+    start = time.time()
+    clf_ovr.fit(X_train, y_train)
+    end = time.time()
+
+    acc_train = clf_ovr.score(X_train, y_train)
+    acc_test = clf_ovr.score(X_test, y_test)
+    duration = end - start
+
+    print("OVR :")
+    print(f"  Accuracy train : {acc_train:.4f}")
+    print(f"  Accuracy test  : {acc_test:.4f}")
+    print(f"  Temps d'entraînement : {duration:.4f} s\n")
+
+    return clf_ovr, duration
+tmp_ovr(X_train, y_train, X_test, y_test)
+
+
+
+
+
+def tmp_ovo(X_train, y_train, X_test, y_test):
+    all_features = FeatureUnion([
+        ('zonal', ZonalInfoPreprocessing()),
+        ('edges', EdgeInfoPreprocessing()),
+        ('pca', PCA(n_components=28))
+    ])
+
+    clf_ovo = Pipeline([
+        ('standard', StandardScaler()),
+        ('features', all_features),
+        ('minmax', MinMaxScaler()),
+        ('svc', OneVsOneClassifier(SVC(kernel='linear', random_state=42)))
+    ])
+
+    start = time.time()
+    clf_ovo.fit(X_train, y_train)
+    end = time.time()
+
+    acc_train = clf_ovo.score(X_train, y_train)
+    acc_test = clf_ovo.score(X_test, y_test)
+    duration = end - start
+
+    print("OVO :")
+    print(f"  Accuracy train : {acc_train:.4f}")
+    print(f"  Accuracy test  : {acc_test:.4f}")
+    print(f"  Temps d'entraînement : {duration:.4f} s\n")
+
+    return clf_ovo, duration
+tmp_ovo(X_train, y_train, X_test, y_test)
 
