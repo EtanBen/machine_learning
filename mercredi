@@ -187,11 +187,11 @@ class ZonalInfoPreprocessing(BaseEstimator, TransformerMixin):
 
 
 # TODO: Create a single sklearn object handling the computation of all features in parallel
-all_features = None
-
+all_features = FeatureUnion([('zonal', ZonalInfoPreprocessing()),('edges', EdgeInfoPreprocessing()),('pca',PCA(n_components=28))])
 F = all_features.fit(X_train,y).transform(X_train)
 # Let's make sure we have the number of dimensions that we expect!
 print("Nb features computed: ", F.shape[1])
+
 
 # Now combine everything in a Pipeline
 # The clf variable is the one which plays the role of the learning algorithms
