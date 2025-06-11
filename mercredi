@@ -18,10 +18,24 @@ from sklearn.model_selection import GridSearchCV
 
 
 # TODO: Add any util functions you may have from the previous script
+digits = load_digits()
+print(digits.data.shape)
+
+def get_statistics_text(targets):
+    # TODO: Write your code here, returning at least the following useful infos:
+    # * Label names
+    # * Number of elements per class
+    df=pd.DataFrame({'Classe': targets})
+    compter=df['Classe'].value_counts().sort_index()
+    print("distribution")
+    print(compter)
+    
+    return compter
 
 
 # TODO: Load the raw data
-X,y = None, None
+X= digits.data
+y= digits.target
 
 #####
 #In machine learning, we must train the model on one subset of data and test it on another.
