@@ -341,13 +341,11 @@ F_acp
 F_final = np.hstack([F_acp, F_zones,F_sobel])
 
 
-
 # TODO: Normalize final features
 F_final = F_final
 
 # Print final feature matrix shape
 print(f"Final feature matrix F_final shape: {F_final.shape}")
-
 
 
 # A LA FIN : génerer une matrice de taille 24 col * nb échantillons 
