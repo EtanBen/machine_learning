@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 # Load processed feature matrix and labels
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.dummy import DummyClassifier
 from sklearn.decomposition import PCA
@@ -17,7 +16,10 @@ from skimage.filters import sobel
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
-
+#matice de confusion
+from sklearn.datasets import make_classification
+from sklearn.svm import SVC
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 # TODO: Add any util functions you may have from the previous script
 digits = load_digits()
@@ -238,6 +240,33 @@ print("Accuracy of the SVC on the train set: ", sum(y_train==predict_train)/len(
 # 1. Display a print of it
 # 2. Display a nice figure of it
 # 3. Report on how you understand the results
+
+
+# Matrice de confusion pour test 
+cm1 = confusion_matrix(y_test, predict_test, labels=clf.classes_)
+disp1= ConfusionMatrixDisplay(confusion_matrix=cm1, display_labels=clf.classes_)
+disp1.plot()
+plt.title('Matrice de confusion pour le Test set')
+plt.show()
+
+# Matrice de confusion pour train 
+cm2= confusion_matrix(y_train, predict_train, labels=clf.classes_)
+disp2 = ConfusionMatrixDisplay(confusion_matrix=cm2, display_labels=clf.classes_)
+disp2.plot()
+plt.title('Matrice de confusion pour le train set')
+plt.show()
+
+# Matrice de confusion sur toutes les données (train et test)
+X_tout = np.vstack((X_train, X_test))
+y_tout = np.concatenate((y_train, y_test))
+y_pred_tout = clf.predict(X_tout)
+
+cm3 = confusion_matrix(y_tout, y_pred_tout)
+disp3 = ConfusionMatrixDisplay(confusion_matrix=cm3, display_labels=clf.classes_)
+disp3.plot()
+plt.title('Matrice de confusion avec toutes le données')
+plt.show()
+
 
 
 # TODO: Work out the following questions (you may also use the score function from the classifier)
