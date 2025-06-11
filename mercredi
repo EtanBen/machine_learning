@@ -327,3 +327,26 @@ print("Analyze different datasets and choose the best approach!\n")
 ########
 
 
+#meilleur taille de test pour avoir la meilleure exactitude 
+def evaluate_model(test_size):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+    clf.fit(X_train, y_train)
+    y_pred = clf.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    return accuracy
+
+def plot_test_size_effect():
+    test_sizes = np.arange(0.1, 0.9, 0.1)
+    accuracies = []
+    for size in test_sizes:
+        accuracy= evaluate_model(size)
+        accuracies.append(accuracy)
+    plt.figure(figsize=(12, 6))
+    plt.plot(test_sizes, accuracies, marker='o')
+    plt.title('Impact de la taille du test sur l\'exactitude')
+    plt.xlabel('Taille du test')
+    plt.ylabel('Exactitude')
+    plt.tight_layout()
+    plt.show()
+plot_test_size_effect()
+
