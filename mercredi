@@ -281,21 +281,67 @@ print("Try different values like 0.1, 0.3, etc., and compare results.\n")
 # TODO: Change from the linear classifier to an rbf kernel
 # TODO: List all interesting parameters you may want to adapt from your preprocessing and algorithm pipeline
 # TODO: Create a dictionary with all the parameters to be adapted and the ranges to be tested
+clf_rbf = Pipeline([('features', all_features),('scaler', StandardScaler()),('svc', SVC(kernel='rbf'))])
+
+
+param_grid = {'features__pca__n_components': [10, 20, 30, 40], 'classifier__c':[0.1, 0.5, 10, 50],'classifier__gamma': [0.01, 0.1, 1, 10]}
+#param_grid = {'features__pca__n_components': [10, 20, 30, 40],  'classifier__kernel': ['linear', 'rbf'],'classifier__c':[0.1, 0.5, 10, 50],'classifier__gamma': [0.01, 0.1, 1, 10]}
+
+#parametre gamma de rbf à comprendre 
+#DO NOT use kernel linear with gamma classifier -->> either do one and leave the other or use mask (check documentation)
 
 # TODO: Use a GridSearchCV on 5 folds to optimize the hyper parameters
-grid_search = GridSearchCV(DummyClassifier()) #, verbose=10)
+from sklearn.model_selection import GridSearchCV
+
+grid = GridSearchCV(clf_rbf, param_grid, cv=5, scoring="accuracy", verbose=1, n_jobs=-1)
+grid.fit(X_train, y_train)
+
+
 # TODO: fit the grid search CV and 
 # 1. Check the results
+print("Best parameters:", grid.best_params_)
+print("Best cross-validation score:", grid.best_score_)
 # 2. Update the original pipeline (or create a new one) with all the optimized hyper parameters
-# 3. Retrain on the whol train set, and evaluate on the test set
-# 4. Answer the questions below and report on your findings
+# 3. Retrain on the whole train set, and evaluate on the test set
+#update the original pipeline with the best parameters
+best_params = grid.best_params_
+clf_rbf.set_params(**best_params)
+clf_rbf.fit(X_train, y_train)
+y_pred = clf_rbf.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy on test set:", accuracy)
 
-print(" K-Fold Cross-Validation Results:")
-print(f"- Best Cross-validation score: {grid_search.best_score_}")
-print(f"- Best parameters found: {grid_search.best_estimator_}")
+# 4. Answer the questions below and report on your findings
+from sklearn.model_selection import GridSearchCV
+
+print("\nQuestion: What happens if we change K from 5 to 10?\n")
+
+for k in [3, 5, 10]:
+    print(f"\nRunning GridSearchCV with K={k}-fold cross-validation:")
+    
+    grid_k = GridSearchCV(
+        clf_rbf,
+        param_grid={
+            'features__pca__n_components': [10, 20, 30],
+            'svc__C': [0.1, 1, 10],
+            'svc__gamma': [0.01, 0.1, 1]
+        },
+        cv=k,
+        scoring="accuracy",
+        n_jobs=-1,
+        verbose=0
+    )
+    
+    grid_k.fit(X_train, y_train)
+    print(f"- Best CV score with K={k}: {grid_k.best_score_:.4f}")
+    print(f"- Best parameters with K={k}: {grid_k.best_params_}")
+    
+#print(" K-Fold Cross-Validation Results:")
+#print(f"- Best Cross-validation score: {grid_search.best_score_}")
+#print(f"- Best parameters found: {grid_search.best_estimator_}")
 #####
-print("\n Question: What happens if we change K from 5 to 10?")
-print("Test different K values and compare the accuracy variation.\n")
+#print("\n Question: What happens if we change K from 5 to 10?")
+#print("Test different K values and compare the accuracy variation.\n")
 
 
 ##########################################
