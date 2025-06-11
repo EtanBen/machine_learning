@@ -342,9 +342,8 @@ def plot_test_size_effect():
     for size in test_sizes:
         accuracy= evaluate_model(size)
         accuracies.append(accuracy)
-    plt.figure(figsize=(12, 6))
     plt.plot(test_sizes, accuracies, marker='o')
-    plt.title('Impact de la taille du test sur l\'exactitude')
+    plt.title('Exactitude en fonction de la taille du test')
     plt.xlabel('Taille du test')
     plt.ylabel('Exactitude')
     plt.tight_layout()
