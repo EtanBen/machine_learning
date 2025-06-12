@@ -12,14 +12,14 @@ print(digits.data.shape)
 X= digits.data
 y= digits.target
 
-X_train, X_test, y_train, y_test=train_test_split(X,y,test_size=0.2,random_state=42)  
+X_train, X_test, y_train, y_test=train_test_split(X,y,test_size=0.2,random_state=42)
 
-### TensorFlow is a powerful open-source deep learning framework developed by Google. 
-## It enables building and training neural networks efficiently, 
-##using optimized tensor computations. 
+### TensorFlow is a powerful open-source deep learning framework developed by Google.
+## It enables building and training neural networks efficiently,
+##using optimized tensor computations.
 ## It supports CPU, GPU, and TPU acceleration, making it ideal for complex AI models.
 
-#Keras is a high-level neural network API that runs on top of TensorFlow. 
+#Keras is a high-level neural network API that runs on top of TensorFlow.
 #It provides an easy-to-use interface for defining deep learning models without needing complex implementations.
 #TensorFlow integrates Keras natively, making it ideal for rapid AI development.
 
@@ -42,11 +42,11 @@ model.add(keras.layers.Dense(10,activation='softmax')) # output layer avec softm
 # TODO: Compile the model (setting parameters on how the model will learn from the data)
 # Use adam optimizer, sparse categorical cross entropy as loss, and at least the accuracy as the metric
 
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 
 # TODO: Train the model and store training and validation history
-history = None
-
+history = model.fit(X_train, y_train, epochs=100, validation_split=0.2) #epoch = 10 : le modèle s'entraîne 10 fois
 
 
 
@@ -69,8 +69,8 @@ plt.show()
 # Save the trained model
 model.save("digit_classifier_model.keras")  # Native Keras format
 
-# TODO: 
+# TODO:
 # For the remaining time of the class, find a way to combine preprocessing + learning algorithm to achieve the best possible scores.
-# Your final tuned model should be written in the test script provided for us to test during the oral exam. 
-# 
+# Your final tuned model should be written in the test script provided for us to test during the oral exam.
+#
 # Enjoy, and good luck
