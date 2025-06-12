@@ -24,6 +24,8 @@ from sklearn.metrics import accuracy_score
 import time
 from sklearn.multiclass import OneVsRestClassifier
 
+from sklearn.neighbors import KNeighborsClassifier
+
 # TODO: Add any util functions you may have from the previous script
 digits = load_digits()
 print(digits.data.shape)
@@ -345,6 +347,32 @@ for k in [3, 5, 10]:
 #####
 #print("\n Question: What happens if we change K from 5 to 10?")
 #print("Test different K values and compare the accuracy variation.\n")
+
+#testing pour k plus proche voisins comme methode de classification 
+clf_knn = Pipeline([
+    ('features', FeatureUnion([
+        ('zonal', ZonalInfoPreprocessing()),
+        ('edges', EdgeInfoPreprocessing()),
+        ('pca_pipeline', Pipeline([
+            ('scaler', StandardScaler()),  
+            ('pca', PCA(n_components=28))
+        ]))
+    ])),
+    ('minmax', MinMaxScaler()),  
+    ('knn', KNeighborsClassifier(n_neighbors=5)) 
+])
+
+clf_knn.fit(X_train, y_train)
+y_pred_knn = clf_knn.predict(X_test)
+accuracy_knn = accuracy_score(y_test, y_pred_knn)
+
+cm_knn = confusion_matrix(y_test, y_pred_knn)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm_knn)
+disp.plot()
+plt.title("Matrice de confusion - K-NN")
+plt.show()
+
+print(f" Précision sur le test set avec K-NN : {accuracy_knn:.4f}")
 
 
 ##########################################
