@@ -19,14 +19,14 @@ from scipy.ndimage import sobel
 digits = load_digits()
 print(digits.data.shape)
 
-plt.show()
+plt.show() #visualisation des données
 
 
 # Visualize some images
 # TODO: Graph the first4 images from the data base 
 """"
 for i in range (4):
-    plt.matshow(digits.images[i], cmap="gray")
+    plt.matshow(digits.images[i], cmap="gray") #4 premières imags
 """
 
 # Display at least one random sample par class (some repetitions of class... oh well)
@@ -187,7 +187,7 @@ print("erreur :",erreur)
 
 
 
-compare_img(original_image,approx_image)
+compare_img(original_image,approx_image) #comparer avec le SSIM
 
 fig, axes = plt.subplots(4, 4, figsize=(8, 8))
 axes=axes.flatten
@@ -222,7 +222,7 @@ plt.show()
 
 pca2= PCA().fit(F)
 
-var_cumulee=np.cumsum(pca2.explained_variance_ratio_)
+var_cumulee=np.cumsum(pca2.explained_variance_ratio_) #calcul de la variance cumulée
 
 
 plt.plot(var_cumulee)
@@ -231,9 +231,6 @@ plt.ylabel("Variance expliquée cumulée")
 plt.title("Variance expliquée selon le nombre de composantes")
 plt.show()
 
-
-# Question : Que faire si on utilise pas l'acp
-#Comment générer des images à partir de l'acp
 
 # Create the visualization plot
 
@@ -292,7 +289,7 @@ images = digits.images
 
 gradient_means = []
 
-for image in images:
+for image in images: #filtre de Sobel
     A_x = ndimage.sobel(image, axis=0, mode='reflect')
     A_y = ndimage.sobel(image, axis=1, mode='reflect')
     A = np.sqrt(A_x**2 + A_y**2)
@@ -308,9 +305,11 @@ F_sobel
 pca = PCA().fit(F)  # F : matrice normalisée (ex: digits.data / 16)
 #calculer autant de composantes qu’il y a de dimensions dans F
 #entraîne ce modèle sur les données F 
+
 # Variance expliquée cumulée
 cum_var = np.cumsum(pca.explained_variance_ratio_)
 
+#on veut savoir quel nombre minimal de composantes permet d'avoir une variance expliquée cumulée de 95%
 plt.figure(figsize=(8,4))
 plt.plot(cum_var, marker='o')
 plt.axhline(y=0.99, color='r', linestyle='--', label='95% de variance')
@@ -323,12 +322,8 @@ plt.show()
 n_components = np.argmax(cum_var >= 0.95) 
 print(f"Nombre minimal de composantes pour 95% de variance : {n_components}")
 
-from sklearn.decomposition import PCA
-import numpy as np
-import pandas as pd
 
-
-pca_28 = PCA(n_components=28)
+pca_28 = PCA(n_components=28) #on trouve 28 composantes
 F_reduced = pca_28.fit_transform(F) 
 
 df_pca = pd.DataFrame(F_reduced, columns=[f'PC{i+1}' for i in range(28)])
